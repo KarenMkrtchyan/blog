@@ -24,4 +24,16 @@ describe('http tests', () => {
 			expect(r).toBeDefined()
 		}
 	})
+	test('new blog correctly saved to the DB', async () => {
+		const newBlog = {
+			title: 'How to chess',
+			author: 'Mr Chess',
+			url: 'https://www.chess.com/',
+			likes: 25,
+		}
+		await api.post('/').send(newBlog).set('Content-Type', 'application/json')
+		const updatedBlogs = await api.get('/api/blogs')
+		expect(updatedBlogs.body.length).toEqual(helper.blogs.length + 1)
+		expect(updatedBlogs.body).toContainEqual(newBlog)
+	})
 })
